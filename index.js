@@ -171,6 +171,8 @@
 
   // Associate view controls with elements.
   var controls = viewer.controls();
+  var deviceOrientationControlMethod = new DeviceOrientationControlMethod();
+  controls.registerMethod('deviceOrientation', deviceOrientationControlMethod);
   controls.registerMethod('upElement',    new Marzipano.ElementPressControlMethod(viewUpElement,     'y', -velocity, friction), true);
   controls.registerMethod('downElement',  new Marzipano.ElementPressControlMethod(viewDownElement,   'y',  velocity, friction), true);
   controls.registerMethod('leftElement',  new Marzipano.ElementPressControlMethod(viewLeftElement,   'x', -velocity, friction), true);
@@ -243,6 +245,16 @@
       startAutorotate();
     }
   }
+  function enableGiro(scene) {
+	  deviceOrientationControlMethod.getPitch(function(err, pitch) {
+		if (!err) {
+		  scene.view.setPitch(pitch);
+		}
+	  });
+	  controls.enableMethod('deviceOrientation');
+	  giroenabled = true;
+	  toggleElementGiro.className = 'enabled';
+	}
 
   function createLinkHotspotElement(hotspot) {
 
